@@ -1,11 +1,15 @@
-*, *::before, *::after {
+/* basic CSS reset */
+
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 
 * {
     margin: 0;
     padding: 0;
-    font:inherit;
+    font: inherit;
 }
 
 html {
@@ -16,7 +20,92 @@ body {
     min-height: 100vh;
 }
 
-img, picture, svg, video {
+img,
+picture,
+svg,
+video {
     display: block;
     max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-wrap: balance;
+}
+
+/* my CSS styles */
+
+html {
+    font-family: 'Nutino', sans-serif;
+    font-size: 22px;
+    background-color: dodgerblue;
+}
+
+.App {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    justify-content: center;
+    padding: 1rem 0.5rem;
+}
+
+section {
+    width: 100%;
+    max-width: 420px;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 2px solid;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    flex-grow: 1;
+    padding-bottom: 1rem;
+}
+
+a,
+a:visited {
+    color: #fff;
+}
+
+input[type="text"],
+input[type="password"],
+button,
+textarea {
+    padding: 0.25rem;
+    border-radius: 0.5rem;
+}
+
+label,
+button {
+    margin-top: 1rem;
+}
+
+button {
+    padding: 0.5rem;
+}
+
+.hide {
+    display: none;
+}
+
+.valid {
+    color: limegreen;
+    margin-left: 0.25rem;
+}
+
+.invalid {
+    color: red;
+    margin-left: 0.25rem;
 }
