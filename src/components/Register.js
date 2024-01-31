@@ -2,11 +2,22 @@ import { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
+const BIRTHDATE_REGEX = /^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[012])\.([0-9]{4})$/;
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 const Register = () => {
     const userRef = useRef(null);
+
+    const [firstname, setFirstname] = useState('');
+    const [firstnameFocus, setFirstnameFocus] = useState(false);
+
+    const [lastname, setLastname] = useState('');
+    const [lastnameFocus, setLastnameFocus] = useState(false);
+
+    const [birthDate, setBirthDate] = useState('');
+    const [validBirthDate, setValidBirthDate] = useState(false);
+    const [birthDateFocus, setBirthDateFocus] = useState(false);
 
     const [username, setUsername] = useState('');
     const [validUsername, setValidUsername] = useState(false);
@@ -20,12 +31,13 @@ const Register = () => {
     const [validPassword, setValidPassword] = useState(false);
     const [validMatch, setValidMatch] = useState(false);
 
-    const [errMsg, setErrMsg] = useState('');
-    const [errFocus, setErrFocus] = useState(false);
-
     useEffect(() => {
         userRef.current.focus()
     }, []);
+
+    useEffect(() => {
+        setValidBirthDate(BIRTHDATE_REGEX.test(birthDate));
+    }, [birthDate])
 
     useEffect(() => {
         setValidUsername(USER_REGEX.test(username));
@@ -36,38 +48,86 @@ const Register = () => {
         setValidMatch(password === matchPassword);
     }, [password, matchPassword]);
 
-    const handleSubmit = (event) => {
-        console.log('form submitted');
-
-        event.preventDefault();
-
-        const v1 = USER_REGEX.test(username);
-        const v2 = PASSWORD_REGEX.test(password);
-
-        if (!v1 || !v2) {
-            setErrFocus('Invalid Entry. Please check provided username or password');
-            return
-        }
-    }
-
     return (
         <section>
             <h1>Register</h1>
-            <form onSubmit={handleSubmit}>
+            <form>
+                <label htmlFor="firstname">
+                    First name:
+                    <FontAwesomeIcon icon={faCheck} className={firstname ? "valid" : "hide"} />
+                    <FontAwesomeIcon icon={faTimes} className={!firstname && firstnameFocus ? "invalid" : "hide"} />
+                </label>
+                <input
+                    id="firstname"
+                    type="text"
+                    required
+                    placeholder="type your first name"
+                    autoComplete="off"
+                    ref={userRef}
+                    value={firstname}
+                    onChange={(e) => setFirstname(e.target.value)}
+                    onFocus={() => setFirstnameFocus(true)}
+                    onBlur={() => setFirstnameFocus(false)}
+                />
+
+                <label htmlFor="lastname">
+                    Last name:
+                    <FontAwesomeIcon icon={faCheck} className={lastname ? "valid" : "hide"} />
+                    <FontAwesomeIcon icon={faTimes} className={!lastname && lastnameFocus ? "invalid" : "hide"} />
+                </label>
+                <input
+                    id="lastname"
+                    type="text"
+                    required
+                    placeholder="type your last name"
+                    autoComplete="off"
+                    value={lastname}
+                    onChange={(e) => setLastname(e.target.value)}
+                    onFocus={() => setLastnameFocus(true)}
+                    onBlur={() => setLastnameFocus(false)}
+                />
+
+                <label htmlFor="birthdate">
+                    Birth date:
+                    
+                    <FontAwesomeIcon icon={faCheck} className={validBirthDate ? "valid" : "hide"}/>
+                    <FontAwesomeIcon icon={faTimes} className={!validBirthDate && birthDateFocus ? "invalid" : "hide"} />
+                </label>
+                <input
+                    id="birthdate"
+                    type="text"
+                    required
+                    placeholder="type your birth date"
+                    autoComplete="off"
+                    value={birthDate}
+                    onChange={(e) => setBirthDate(e.target.value)}
+                    onFocus={() => setBirthDateFocus(true)}
+                    onBlur={() => setBirthDateFocus(false)}
+                />
+                <p className={birthDateFocus && !validBirthDate ? "instructions" : "offscreen"}>
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                    Birth date should be provided in the next format:<br />
+                    Format - dd.mm.yyyy<br />
+                    Example - 01.12.1999<br />
+                    dd - 01 - day<br />
+                    mm - 12 - month<br />
+                    yyyy - 1999 - year<br />
+                </p>
+
                 <label htmlFor="username">
                     Username:
 
                     <FontAwesomeIcon icon={faCheck} className={validUsername ? "valid" : "hide"} />
-                    <FontAwesomeIcon icon={faTimes} className={!username || validUsername ? "hide" : "invalid"} />
+                    <FontAwesomeIcon icon={faTimes} className={!validUsername && usernameFocus ? "invalid" : "hide"} />
                 </label>
                 <input
                     id="username"
                     type="text"
                     required
                     placeholder="type a username"
+                    autoComplete="off"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    ref={userRef}
                     aria-invalid={validUsername ? false : true}
                     aria-describedby="uidnote"
                     onFocus={() => setUsernameFocus(true)}
@@ -83,7 +143,7 @@ const Register = () => {
                 <label htmlFor="password">
                     Password:
                     <FontAwesomeIcon icon={faCheck} className={!validPassword ? "hide" : "valid"} />
-                    <FontAwesomeIcon icon={faTimes} className={!password || validPassword ? "hide" : "invalid"} />
+                    <FontAwesomeIcon icon={faTimes} className={!validPassword && passwordFocus ? "invalid" : "hide"} />
                 </label>
                 <input
                     id="password"
@@ -108,7 +168,7 @@ const Register = () => {
                 <label htmlFor="confirmPassword">
                     Confirm Password:
                     <FontAwesomeIcon icon={faCheck} className={validMatch && matchPassword ? "valid" : "hide"} />
-                    <FontAwesomeIcon icon={faTimes} className={validMatch ? "hide" : "invalid"} />
+                    <FontAwesomeIcon icon={faTimes} className={!validMatch ? "invalid" : "hide"} />
                 </label>
                 <input
                     id="confirmPassword"
