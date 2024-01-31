@@ -20,6 +20,9 @@ const Register = () => {
     const [validPassword, setValidPassword] = useState(false);
     const [validMatch, setValidMatch] = useState(false);
 
+    const [errMsg, setErrMsg] = useState('');
+    const [errFocus, setErrFocus] = useState(false);
+
     useEffect(() => {
         userRef.current.focus()
     }, []);
@@ -33,10 +36,24 @@ const Register = () => {
         setValidMatch(password === matchPassword);
     }, [password, matchPassword]);
 
+    const handleSubmit = (event) => {
+        console.log('form submitted');
+
+        event.preventDefault();
+
+        const v1 = USER_REGEX.test(username);
+        const v2 = PASSWORD_REGEX.test(password);
+
+        if (!v1 || !v2) {
+            setErrFocus('Invalid Entry. Please check provided username or password');
+            return
+        }
+    }
+
     return (
         <section>
             <h1>Register</h1>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <label htmlFor="username">
                     Username:
 
