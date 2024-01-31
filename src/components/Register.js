@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
@@ -42,6 +42,12 @@ const Register = () => {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                 />
+                <p className={!username || validUsername ? "offscreen" : "instructions"}>
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                    4 to 24 characters.<br />
+                    Must begin with a letter.<br />
+                    Letters, numbers, underscores, hyphens allowed.
+                </p>
 
                 <label htmlFor="password">
                     Password:
@@ -57,6 +63,12 @@ const Register = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
+                <p className={!password || validPassword ? "offscreen" : "instructions"}>
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                    8 to 24 characters.<br />
+                    Must include uppercase and lowercase letters, a number and a special character.<br />
+                    Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
+                </p>
 
                 <label htmlFor="confirmPassword">
                     Confirm Password:
@@ -72,8 +84,12 @@ const Register = () => {
                     value={matchPassword}
                     onChange={(e) => setMatchPassword(e.target.value)}
                 />
+                <p className={validMatch ? "offscreen" : "instructions"}>
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                    Must match the first password input field.
+                </p>
 
-                <button type="submit">Sign Up</button>
+                <button type="submit" disabled={!validUsername || !validPassword || !validMatch ? true : false}>Sign Up</button>
             </form>
             <p>
                 Already registered?<br />
