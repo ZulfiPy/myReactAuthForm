@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
@@ -6,14 +6,23 @@ const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 
 const Register = () => {
+    const userRef = useRef(null);
+
     const [username, setUsername] = useState('');
     const [validUsername, setValidUsername] = useState(false);
+    const [usernameFocus, setUsernameFocus] = useState(false);
 
     const [password, setPassword] = useState('');
     const [matchPassword, setMatchPassword] = useState('');
+    const [passwordFocus, setPasswordFocus] = useState(false);
+    const [matchPasswordFocus, setMatchPasswordFocus] = useState(false);
 
     const [validPassword, setValidPassword] = useState(false);
     const [validMatch, setValidMatch] = useState(false);
+
+    useEffect(() => {
+        userRef.current.focus()
+    }, []);
 
     useEffect(() => {
         setValidUsername(USER_REGEX.test(username));
@@ -41,8 +50,13 @@ const Register = () => {
                     placeholder="type a username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    ref={userRef}
+                    aria-invalid={validUsername ? false : true}
+                    aria-describedby="uidnote"
+                    onFocus={() => setUsernameFocus(true)}
+                    onBlur={() => setUsernameFocus(false)}
                 />
-                <p className={!username || validUsername ? "offscreen" : "instructions"}>
+                <p id="uidnote" className={usernameFocus &&!validUsername ? "instructions" : "offscreen"}>
                     <FontAwesomeIcon icon={faInfoCircle} />
                     4 to 24 characters.<br />
                     Must begin with a letter.<br />
@@ -62,8 +76,12 @@ const Register = () => {
                     autoComplete="off"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    aria-invalid={validPassword ? false : true}
+                    aria-describedby="pwdnote"
+                    onFocus={() => setPasswordFocus(true)}
+                    onBlur={() => setPasswordFocus(false)}
                 />
-                <p className={!password || validPassword ? "offscreen" : "instructions"}>
+                <p id="pwdnote" className={passwordFocus && !validPassword ? "instructions" : "offscreen"}>
                     <FontAwesomeIcon icon={faInfoCircle} />
                     8 to 24 characters.<br />
                     Must include uppercase and lowercase letters, a number and a special character.<br />
@@ -83,8 +101,12 @@ const Register = () => {
                     autoComplete="off"
                     value={matchPassword}
                     onChange={(e) => setMatchPassword(e.target.value)}
+                    aria-invalid={matchPassword ? false : true}
+                    aria-describedby="confirmnote"
+                    onFocus={() => setMatchPasswordFocus(true)}
+                    onBlur={() => setMatchPasswordFocus(false)}
                 />
-                <p className={validMatch ? "offscreen" : "instructions"}>
+                <p id="confirmnote" className={matchPasswordFocus && !validMatch ? "instructions" : "offscreen"}>
                     <FontAwesomeIcon icon={faInfoCircle} />
                     Must match the first password input field.
                 </p>
