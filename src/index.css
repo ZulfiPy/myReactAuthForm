@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
 /* basic CSS reset */
 
 *,
@@ -10,10 +11,6 @@
     margin: 0;
     padding: 0;
     font: inherit;
-}
-
-html {
-    color-scheme: dark light;
 }
 
 body {
@@ -42,16 +39,20 @@ h6 {
 html {
     font-family: 'Nutino', sans-serif;
     font-size: 22px;
+    color: #fff;
+}
+
+body {
     background-color: dodgerblue;
 }
 
 .App {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    justify-content: center;
-    padding: 1rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; 
+  padding: 1rem 0.5rem;
 }
 
 section {
@@ -62,8 +63,7 @@ section {
     flex-direction: column;
     justify-content: flex-start;
     padding: 1rem;
-    background-color: rgba(0, 0, 0, 0.4);
-    border: 2px solid;
+    background-color: rgba(0,0,0,0.4);
 }
 
 form {
@@ -74,8 +74,7 @@ form {
     padding-bottom: 1rem;
 }
 
-a,
-a:visited {
+a, a:visited {
     color: #fff;
 }
 
@@ -83,25 +82,27 @@ input[type="text"],
 input[type="password"],
 button,
 textarea {
-    padding: 0.25rem;
-    border-radius: 0.5rem;
+  font-family: 'Nunito', sans-serif;
+  font-size: 22px;
+  padding: 0.25rem;
+  border-radius: 0.5rem;
 }
 
 label,
 button {
-    margin-top: 1rem;
+  margin-top: 1rem;
 }
 
 button {
-    padding: 0.5rem;
+  padding: 0.5rem;
 }
 
 .instructions {
     font-size: 0.75rem;
+    border-radius: 0.5rem;
     background: #000;
     color: #fff;
     padding: 0.25rem;
-    border-radius: 0.5rem;
     position: relative;
     bottom: -10px;
 }
@@ -135,7 +136,6 @@ button {
     font-weight: bold;
     padding: 0.5rem;
     margin-bottom: 0.5rem;
-    border: 2px solid white;
 }
 
 .line {
