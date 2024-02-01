@@ -96,6 +96,25 @@ button {
     padding: 0.5rem;
 }
 
+.instructions {
+    font-size: 0.75rem;
+    background: #000;
+    color: #fff;
+    padding: 0.25rem;
+    border-radius: 0.5rem;
+    position: relative;
+    bottom: -10px;
+}
+
+.instructions > svg {
+    margin-right: 0.25rem;
+}
+
+.offscreen {
+    position: absolute;
+    left: -9999px;
+}
+
 .hide {
     display: none;
 }
@@ -110,17 +129,11 @@ button {
     margin-left: 0.25rem;
 }
 
-.instructions {
-    font-size: 0.75rem;
-    background: #000;
-    color: #fff;
-    padding: 0.25rem;
-    border-radius: 0.5rem;
-    position: relative;
-    bottom: -10px;
-}
-
-.offscreen {
-    position: absolute;
-    left: -9999px;
+.errmsg {
+    background-color: lightpink;
+    color: firebrick;
+    font-weight: bold;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    border: 2px solid white;
 }
