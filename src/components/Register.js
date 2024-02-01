@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import axios from "../api/axios";
 
 const BIRTHDATE_REGEX = /^(0[1-9]|[12][0-9]|3[01])\.(0[1-9]|1[012])\.([0-9]{4})$/;
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+
+const REGISTER_URL = '/register'
 
 const Register = () => {
     const userRef = useRef(null);
@@ -54,7 +57,7 @@ const Register = () => {
         setValidMatch(password === matchPassword);
     }, [password, matchPassword]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const birthdateRegExTest = BIRTHDATE_REGEX.test(birthDate);
@@ -67,14 +70,38 @@ const Register = () => {
             setErrMsg('Invalid Data Provided');
             return;
         }
-        setSuccess(true);
-        setFirstname("");
-        setLastname("");
-        setBirthDate("");
-        setUsername("");
-        setPassword("");
-        setMatchPassword("");
-        console.log("done")
+
+        try {
+            const response = await axios.post(REGISTER_URL,
+                JSON.stringify({ username, password, firstname, lastname, birthDate }),
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true
+                }
+            );
+
+            console.log(JSON.stringify(response));
+
+            setSuccess(true);
+            setFirstname("");
+            setLastname("");
+            setBirthDate("");
+            setUsername("");
+            setPassword("");
+            setMatchPassword("");
+            console.log("done")
+        } catch (err) {
+            if (!err?.response) {
+                setErrMsg("No Server Response");
+            } else if (err.response?.status === 409) {
+                setErrMsg("Username taken")
+            } else {
+                setErrMsg("Registration Failed");
+            }
+            errRef.current.focus();
+            console.log(err?.response);
+        }
+
     }
 
     return (
@@ -182,7 +209,7 @@ const Register = () => {
                         <label htmlFor="password">
                             Password:
                             <FontAwesomeIcon icon={faCheck} className={!validPassword ? "hide" : "valid"} />
-                            <FontAwesomeIcon icon={faTimes} className={(!validPassword && passwordFocus)? "invalid" : "hide"} />
+                            <FontAwesomeIcon icon={faTimes} className={(!validPassword && passwordFocus) ? "invalid" : "hide"} />
                         </label>
                         <input
                             id="password"
