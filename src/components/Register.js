@@ -35,6 +35,8 @@ const Register = () => {
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
 
+    const allInputsExist = [firstname, lastname, validBirthDate, validUsername, validPassword, validMatch].every(Boolean);
+
     useEffect(() => {
         userRef.current.focus()
     }, []);
@@ -225,11 +227,11 @@ const Register = () => {
                             Must match the first password input field.
                         </p>
 
-                        <button type="submit" disabled={!validUsername || !validPassword || !validMatch ? true : false}>Sign Up</button>
+                        <button type="submit" disabled={!allInputsExist}>Sign Up</button>
                     </form>
                     <p>
                         Already registered?<br />
-                        <span className="underline">
+                        <span className="line">
                             <a href="#">Sign In</a>
                         </span>
                     </p>
