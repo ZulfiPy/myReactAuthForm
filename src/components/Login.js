@@ -1,10 +1,13 @@
-import { useState, useRef } from "react";
-import axios from "../api/axios";
+import { useState, useRef, useEffect, useContext } from "react";
+import AuthContext from "../context/AuthProvider";
 
+import axios from "../api/axios";
 const LOGIN_URL = "/auth"
 
 
 const Login = () => {
+    const { setAuth } = useContext(AuthContext);
+
     const userRef = useRef(null);
     const errRef = useRef(null);
 
@@ -14,9 +17,17 @@ const Login = () => {
     const [errMsg, setErrMsg] = useState("");
     const [success, setSuccess] = useState(false);
 
+    useEffect(() => {
+        userRef.current.focus();
+    }, []);
+
+    useEffect(() => {
+        setErrMsg("");
+    }, [username, password]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         try {
             const response = await axios.post(LOGIN_URL,
                 JSON.stringify({
@@ -30,11 +41,10 @@ const Login = () => {
 
             console.log(JSON.stringify(response?.data));
 
-            const accessToken = response?.data?.accessToken;
             const roles = response?.data?.roles;
+            const accessToken = response?.data?.accessToken;
 
-            console.log(JSON.stringify(accessToken));
-            console.log(JSON.stringify(roles));
+            setAuth({ username, password, roles, accessToken });
 
             setSuccess(true);
             setUsername("");
@@ -43,14 +53,14 @@ const Login = () => {
             console.log(err)
             if (!err?.response) {
                 setErrMsg("No Server Response");
-            }
-            else if (err.response?.status === 400) {
-                setErrMsg('some of data is missing');
+            } else if (err.response?.status === 400) {
+                setErrMsg('missing username or password');
             } else if (err.reponse?.status === 401) {
                 setErrMsg('Unauthorized: user not found')
             } else {
                 setErrMsg("Login failed");
             }
+            errRef.current.focus();
         }
     }
 
