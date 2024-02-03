@@ -10,8 +10,10 @@ const Home = () => {
 
     const logout = async () => {
         try {
-            const response = await axios.get(LOGOUT_URL);
-            console.log(JSON.stringify(response));
+            const response = await axios.get(LOGOUT_URL, {
+                withCredentials: true
+            });
+            console.log(JSON.stringify(response?.data));
             setAuth({});
             navigate("/linkpage");
         } catch (err) {
