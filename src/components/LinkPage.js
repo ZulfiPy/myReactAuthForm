@@ -7,7 +7,7 @@ const Linkpage = () => {
             <br />
             <h2>Public</h2>
             <br />
-            <Link to="login">Login</Link>
+            <Link to="/login">Login</Link>
             <Link to="/register">Register</Link>
             <br />
             <Link to="/">Home</Link>
