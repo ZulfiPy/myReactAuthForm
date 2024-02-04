@@ -44,7 +44,7 @@ const Login = () => {
                 }
             );
 
-            console.log(JSON.stringify(response?.data));
+            console.log("response data in login", JSON.stringify(response?.data));
 
             const roles = response?.data?.roles;
             const accessToken = response?.data?.accessToken;
