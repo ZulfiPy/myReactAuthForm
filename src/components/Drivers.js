@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 
 const Drivers = () => {
-    const [drivers, setdrivers] = useState();
+    const [drivers, setDrivers] = useState();
     const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate();
     const location = useLocation();
@@ -21,9 +21,11 @@ const Drivers = () => {
                 const response = await axiosPrivate.get('/api/drivers', {
                     signal: controller.signal
                 });
+                const driverNames = response.data.map(driver => driver.firstname)
                 console.log("response.data", response.data);
                 // If the component is still mounted, update the state with the fetched drivers.
-                isMounted && setdrivers(response.data);
+                isMounted && setDrivers(driverNames);
+                console.log(driverNames)
             } catch (err) {
                 // If an error occurs an the components is still mounted, navigate to the login page.
                 // This is being used for handling expired authentication tokens and other errors.
@@ -35,7 +37,7 @@ const Drivers = () => {
         }
 
         // Call the getDrivers function to fetch the drivers.
-        getDrivers();
+       getDrivers();
 
         // Cleanup function to set isMounted to false and abort any ongoing fetch request when the component unmounts.
         return () => {
@@ -46,13 +48,13 @@ const Drivers = () => {
 
 
     return (
-        <article>
+        <section>
             <h2>Drivers List</h2>
             {drivers?.length
                 ? (
-                    JSON.stringify(drivers)
+                    <p>{drivers.map((driver, idx) => <span key={idx}>{idx + 1}. {driver}<br /></span>)}</p>
                 ) : <p>No drivers to display</p>}
-        </article>
+        </section>
     );
 }
 
