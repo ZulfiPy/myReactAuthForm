@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import useInput from "../hooks/useInput";
+import useToggle from "../hooks/useToggle";
 
 import axios from "../api/axios";
 const LOGIN_URL = "/auth"
-
 
 const Login = () => {
     const { setAuth } = useAuth();
@@ -16,11 +17,13 @@ const Login = () => {
     const userRef = useRef(null);
     const errRef = useRef(null);
 
-    const [username, setUsername] = useState("");
+    const [username, resetUser, userAttribs] = useInput("user", ""); // useState("");
     const [password, setPassword] = useState("");
 
     const [errMsg, setErrMsg] = useState("");
     const [success, setSuccess] = useState(false);
+    const [check, toggleCheck] = useToggle('persist', false);
+
 
     useEffect(() => {
         userRef.current.focus();
@@ -46,13 +49,14 @@ const Login = () => {
 
             console.log("response data in login", JSON.stringify(response?.data));
 
-            const roles = response?.data?.roles;
             const accessToken = response?.data?.accessToken;
+            const roles = response?.data?.roles;
 
-            setAuth({ username, password, roles, accessToken });
+            setAuth({ roles, accessToken });
 
             setSuccess(true);
-            setUsername("");
+            //setUsername("");
+            resetUser();
             setPassword("");
             navigate(from, { replace: true });
         } catch (err) {
@@ -93,8 +97,9 @@ const Login = () => {
                             autoComplete="off"
                             placeholder="type a username"
                             ref={userRef}
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            // value={username}
+                            // onChange={(e) => setUsername(e.target.value)}
+                            {...userAttribs}
                         />
 
                         <label htmlFor="password">Password:</label>
@@ -109,6 +114,15 @@ const Login = () => {
                         />
 
                         <button type="submit" disabled={!username || !password ? true : false}>Sign In</button>
+                        <div className="persistCheck">
+                            <input
+                                type="checkbox"
+                                id="persist"
+                                onChange={toggleCheck}
+                                checked={check}
+                            />
+                            <label htmlFor="persist">Trust This Device</label>
+                        </div>
                     </form>
 
                     <p>Need an Account?</p><br />
