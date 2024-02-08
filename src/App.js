@@ -9,6 +9,7 @@ import Unauthorized from "./components/Unauthorized";
 import Lounge from "./components/Lounge";
 import Linkpage from "./components/LinkPage";
 import RequireAuth from "./components/RequireAuth";
+import PersistLogin from "./components/PersistLogin";
 import { Routes, Route } from "react-router-dom";
 
 const ROLES = {
@@ -19,13 +20,14 @@ const ROLES = {
 
 function App() {
   return (
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-          <Route path="linkpage" element={<Linkpage />} />
-          <Route path="unauthorized" element={<Unauthorized />} />
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
+        <Route path="linkpage" element={<Linkpage />} />
+        <Route path="unauthorized" element={<Unauthorized />} />
 
+        <Route element={<PersistLogin />}>
           <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
             <Route path="/" element={<Home />} />
           </Route>
@@ -41,10 +43,11 @@ function App() {
           <Route element={<RequireAuth allowedRoles={[ROLES.Editor, ROLES.Admin]} />}>
             <Route path="lounge" element={<Lounge />} />
           </Route>
-
-          <Route path="*" element={<Missing />} />
         </Route>
-      </Routes>
+
+        <Route path="*" element={<Missing />} />
+      </Route>
+    </Routes>
   );
 }
 
