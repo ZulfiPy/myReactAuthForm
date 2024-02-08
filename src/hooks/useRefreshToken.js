@@ -17,7 +17,6 @@ const useRefreshToken = () => {
                 // update auth state by returning updated authentication state with the new access token
                 return {
                     ...prev,
-                    roles: response.data?.roles,
                     accessToken: response.data.accessToken
                 };
             });
